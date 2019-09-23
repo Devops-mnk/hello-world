@@ -1,0 +1,8 @@
+Template format error: Resource name Vodafone-pb-Subnet is non alphanumeric.
+
+Template format error: Unresolved resource dependencies [VodaPubRoutetable1] in the Resources block of the template
+
+Template format error: Resource name *** is non alphanumeric #2474
+
+ajax error 0
+

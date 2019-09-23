@@ -1,0 +1,19 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Resources": {
+    "mySubnet": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "VpcId": "vpc-0722f22d419162767",
+        "CidrBlock": "12.11.1.0/24",
+        "AvailabilityZone": "ap-south-1b",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "Pub-SUb-2"
+          }
+        ]
+      }
+    }
+  }
+}

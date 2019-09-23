@@ -1,0 +1,192 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Resources": {
+    "VodafoneVPC": {
+      "Type": "AWS::EC2::VPC",
+      "Properties": {
+        "CidrBlock": "10.11.0.0/16",
+        "InstanceTenancy": "default",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "CFT-VPC"
+          }
+        ]
+      }
+    },
+    "VodafonepubSubnet": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "VpcId": {
+          "Ref": "VodafoneVPC"
+        },
+        "CidrBlock": "10.11.0.0/24",
+        "AvailabilityZone": "ap-south-1a",
+        "Tags": [
+          {
+            "Key": "foo",
+            "Value": "bar"
+          }
+        ]
+      }
+    },
+    "VodafonepubSubnet1a": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "VpcId": {
+          "Ref": "VodafoneVPC"
+        },
+        "CidrBlock": "10.11.1.0/24",
+        "AvailabilityZone": "ap-south-1b",
+        "Tags": [
+          {
+            "Key": "foo",
+            "Value": "bar"
+          }
+        ]
+      }
+    },
+    "VodafonepvtSubnet1": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "VpcId": {
+          "Ref": "VodafoneVPC"
+        },
+        "CidrBlock": "10.11.2.0/24",
+        "AvailabilityZone": "ap-south-1a",
+        "Tags": [
+          {
+            "Key": "foo",
+            "Value": "bar"
+          }
+        ]
+      }
+    },
+    "VodafonepvtSubnet2": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "VpcId": {
+          "Ref": "VodafoneVPC"
+        },
+        "CidrBlock": "10.11.3.0/24",
+        "AvailabilityZone": "ap-south-1b",
+        "Tags": [
+          {
+            "Key": "foo",
+            "Value": "bar"
+          }
+        ]
+      }
+    },
+    "VFRTpub": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "VodafoneVPC"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "Test-RT"
+          }
+        ]
+      }
+    },
+    "VFRTpvt": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "VodafoneVPC"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "Test-RT"
+          }
+        ]
+      }
+    },
+    "VodaIGW": {
+      "Type": "AWS::EC2::InternetGateway",
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "foo",
+            "Value": "bar"
+          }
+        ]
+      }
+    },
+    "AttachGateway": {
+      "Type": "AWS::EC2::VPCGatewayAttachment",
+      "Properties": {
+        "VpcId": {
+          "Ref": "VodafoneVPC"
+        },
+        "InternetGatewayId": {
+          "Ref": "VodaIGW"
+        }
+      }
+    },
+    "myRoute": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "VFRTpub"
+        },
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "GatewayId": {
+          "Ref": "VodaIGW"
+        }
+      }
+    },
+    "mySubnetRouteTableAssociation": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "SubnetId": {
+          "Ref": "VodafonepubSubnet1a"
+        },
+        "RouteTableId": {
+          "Ref": "VFRTpub"
+        }
+      }
+    },
+    "InstanceSecurityGroup": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "GroupDescription": "Allow http to client host",
+        "VpcId": {
+          "Ref": "VodafoneVPC"
+        },
+        "SecurityGroupIngress": [
+          {
+            "IpProtocol": "tcp",
+            "FromPort": 80,
+            "ToPort": 80,
+            "CidrIp": "0.0.0.0/0"
+          },
+          {
+            "IpProtocol": "tcp",
+            "FromPort": 22,
+            "ToPort": 22,
+            "CidrIp": "0.0.0.0/0"
+          },
+          {
+            "IpProtocol": "icmp",
+            "FromPort": -1,
+            "ToPort": -1,
+            "CidrIp": "0.0.0.0/0"
+          }
+        ],
+        "SecurityGroupEgress": [
+          {
+            "IpProtocol": "tcp",
+            "FromPort": 80,
+            "ToPort": 80,
+            "CidrIp": "0.0.0.0/0"
+          }
+        ]
+      }
+    }
+  }
+}

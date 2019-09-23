@@ -1,0 +1,37 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Resources": {
+    "MyEC2Instance": {
+      "Type": "AWS::EC2::Instance",
+      "Properties": {
+        "ImageId": "ami-0a74bfeb190bd404f",
+        "KeyName": "Test key",
+        "BlockDeviceMappings": [
+          {
+            "DeviceName": "/dev/sdm",
+            "Ebs": {
+              "VolumeType": "io1",
+              "Iops": "200",
+              "DeleteOnTermination": "false",
+              "VolumeSize": "20"
+            }
+          },
+          {
+            "DeviceName": "/dev/sdk",
+            "NoDevice": {
+            }
+          }
+        ]
+      },
+      "Vpcid": "vpc-00e9f156f75f5101d",
+      "Subnetid": "subnet-0f627dae912bbf848",
+      "Securitygroupid": "sg-00246c68d28615960",
+      "Tags": [
+        {
+          "key": "Name",
+          "Vlaue": "test"
+        }
+      ]
+    }
+  }
+}
